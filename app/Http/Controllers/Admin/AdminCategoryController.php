@@ -132,7 +132,6 @@ class AdminCategoryController extends Controller
      */
     public function delete(Category $category): View
     {
-        //
         return view('admin.categories.delete')
             ->with('category', $category);
     }
