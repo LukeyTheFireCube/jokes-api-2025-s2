@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('category_joke', function (Blueprint $table) {
             $table->id();
 
+            // $table->foreignId('joke_id')->constrained('users');
+            // $table->foreignId('category_id')->constrained('users');
+
             $table->foreignIdFor(Joke::class)->constrained();
             $table->foreignIdFor(Category::class)->constrained();
 

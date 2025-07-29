@@ -34,6 +34,11 @@ class Category extends Model
         return $this->jokes()->orderBy('title', 'desc');
     }
 
+    public function jokesByTitle(): BelongsToMany
+    {
+        return $this->jokes()->orderBy('title');
+    }
+
     /**
      * Returns the collection of related jokes in reverse order
      * of their creation date
