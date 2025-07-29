@@ -149,4 +149,98 @@ class AdminCategoryController extends Controller
         return redirect()->route('admin.categories.index')
             ->with('success', "Category {$categoryTitle} successfully");
     }
+
+
+
+    public function trash(Request $request): View
+    {
+
+        $validated = $request->validate([
+            'perPage' => ['integer', 'nullable'],
+            'page' => ['integer', 'nullable'],
+            'search' => ['nullable', 'string', 'max:32',],
+        ]);
+
+        $perPage = $validated['perPage'] ?? 12;
+        $page = $validated['page'] ?? 1;
+        $search = $validated['search'] ?? '';
+
+        $categories = Category::onlyTrashed()
+            ->where('title', 'like', '%' . $search . '%')
+            ->orderBy('title')
+            ->withCount('jokes')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return view('admin.categories.trash')
+            ->with('categories', $categories)
+            ->with('search', $search);
+    }
+
+
+    public function recoverAll(): RedirectResponse
+    {
+        $categories = Category::onlyTrashed()->get();
+
+        foreach ($categories as $category) {
+            $category->restore();
+        }
+
+        return redirect()->route('admin.categories.index')
+            ->with('success', __('Categories') . ' ' . __('successfully recovered from trash'));
+    }
+
+
+    public function removeAll(): RedirectResponse
+    {
+        $categories = Category::onlyTrashed()->get();
+
+        foreach ($categories as $category) {
+            $category->forceDelete();
+        }
+
+        return redirect()
+            ->route('admin.categories.trash')
+            ->with('success', __('Categories') . ' ' . __('successfully removed from trash'));
+    }
+
+
+    public function recoverOne(string $id): RedirectResponse
+    {
+
+        $category = Category::onlyTrashed()->whereId($id)->first();
+
+        if ($category) {
+            $category->restore();
+
+            return redirect()
+                ->route('admin.categories.index')
+                ->with('success', __('Category') . ' ' . __('successfully restored'));
+        }
+
+        return redirect()
+            ->route('admin.categories.index')
+            ->with('Error', __('Category') . ' ' . __('not found'));
+
+    }
+
+
+    public function removeOne(string $id): RedirectResponse
+    {
+        $category = Category::onlyTrashed()->whereId($id)->first();
+
+        if ($category) {
+            $category->forceDelete();
+
+            return redirect()
+                ->route('admin.categories.index')
+                ->with('success', __('Category') . ' ' . __('successfully restored'));
+        }
+
+        return redirect()
+            ->route('admin.categories.index')
+            ->with('Error', __('Category') . ' ' . __('not found'));
+
+    }
+
+
 }

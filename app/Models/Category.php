@@ -11,7 +11,7 @@ class Category extends Model
 {
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
     use HasFactory;
-    // use SoftDeletes;
+    use SoftDeletes;
 
     protected $table = 'categories';
 
