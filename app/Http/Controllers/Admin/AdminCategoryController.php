@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -44,17 +45,34 @@ class AdminCategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'title' => [
+                'required',
+                'string',
+                'min:4', 'max:32',
+                'unique:categories,title',
+            ],
+            'description' => [
+                'nullable',
+                'string',
+                'min:16', 'max:255',
+            ],
+        ]);
+
+        $category = Category::create($validated);
+
+        return redirect()->route('admin.categories.index')
+            ->with('success', 'Category added successfully');
     }
 
     /**
