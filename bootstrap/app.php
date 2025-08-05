@@ -14,9 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function (){
-            Route::middleware('api')
-                ->prefix('v1')
-                ->group(base_path('routes/api_v1.php'));
+//            Route::middleware('api')
+//                ->prefix('v1')
+//                ->group(base_path('routes/api_v1.php'));
 
 //            \Illuminate\Routing\Route::middleware('api')
 //                ->prefix('v2')
