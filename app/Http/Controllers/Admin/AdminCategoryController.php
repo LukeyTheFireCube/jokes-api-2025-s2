@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class AdminCategoryController extends Controller
@@ -33,7 +34,7 @@ class AdminCategoryController extends Controller
             ->paginate($perPage, ['*'], 'page', $page);
 
         // TODO: get trashed category count
-        $trashCount = 0;
+        $trashCount = Category::onlyTrashed()->count();
 
         // return view
         return view('admin.categories.index')
@@ -112,7 +113,7 @@ class AdminCategoryController extends Controller
                 'required',
                 'string',
                 'min:4', 'max:32',
-                'unique:categories,title',
+                Rule::unique('categories')->ignore($category->id)
             ],
             'description' => [
                 'nullable',
@@ -201,7 +202,6 @@ class AdminCategoryController extends Controller
             ->route('admin.categories.trash')
             ->with('success', __('Categories') . ' ' . __('successfully removed from trash'));
     }
-
 
     public function recoverOne(string $id): RedirectResponse
     {
