@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -14,12 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function (){
-//            Route::middleware('api')
-//                ->prefix('v1')
-//                ->group(base_path('routes/api_v1.php'));
+            Route::middleware('api')
+                ->prefix('api/v1')
+                ->group(base_path('routes/api_v1.php'));
 
-//            \Illuminate\Routing\Route::middleware('api')
-//                ->prefix('v2')
+//            \Illuminate\Support\Facades\Route::middleware('api')
+//                ->prefix('api/v2')
 //                ->group(base_path('routes/api_v2.php'));
 
             /* Add further API versions as required */

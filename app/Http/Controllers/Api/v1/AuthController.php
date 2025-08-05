@@ -55,7 +55,9 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $validator->validated()['name'],
             'email' => $validator->validated()['email'],
-            'password' => Hash::make($validator->validated()['password']),
+            'password' => Hash::make(
+                $validator->validated()['password']
+            ),
         ]);
 
         $token = $user->createToken('MyAppToken')->plainTextToken;
@@ -69,4 +71,96 @@ class AuthController extends Controller
             201
         );
     }
+
+    /**
+     * User Login
+     *
+     * Attempt to log the user in using email
+     * and password based authentication.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function login(Request $request): JsonResponse
+    {
+        // Alternative using string based validation rules
+        // $validator = Validator::make($request->all(), [
+        //     'email' => 'required|string|email|max:255',
+        //     'password' => 'required|string|min:6',
+        // ]);
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'string', 'email', 'max:255',],
+            'password' => ['required', 'string',],
+        ]);
+
+        if ($validator->fails()) {
+            return ApiResponse::error(
+                [
+                    'error' => $validator->errors()
+                ],
+                'Invalid credentials',
+                401
+            );
+        }
+
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return ApiResponse::error(
+                [],
+                'Invalid credentials',
+                401);
+        }
+
+        $user = Auth::user();
+        $token = $user->createToken('MyAppToken')->plainTextToken;
+
+        return ApiResponse::success(
+            [
+                'token' => $token,
+                'user' => $user,
+            ],
+            'Login successful'
+        );
+    }
+
+    /**
+     * User Profile API
+     *
+     * Provide the user's profile information, including:
+     * - name,
+     * - email,
+     * - email verified,
+     * - created at, and
+     * - updated at.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function profile(Request $request): JsonResponse
+    {
+        return ApiResponse::success(
+            [
+                'user' => $request->user(),
+            ],
+            'User profile request successful'
+        );
+    }
+
+    /**
+     * User Logout
+     *
+     * Log user out of system, cleaning token and session details.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->tokens()->delete();
+
+        return ApiResponse::success(
+            [],
+            'Logout successful'
+        );
+    }
+
 }

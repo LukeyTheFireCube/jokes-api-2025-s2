@@ -8,14 +8,6 @@ use Illuminate\Support\Facades\Log;
 
 class ApiResponse
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
     public static function rollback(
         $error,
         $message = "Something went wrong! Process did not complete."
