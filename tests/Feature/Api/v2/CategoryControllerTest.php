@@ -69,7 +69,6 @@ test('return error on missing category', function () {
 });
 
 
-
 test('create a new category', function () {
     // Arrange
     $data = [
@@ -90,4 +89,60 @@ test('create a new category', function () {
         ->assertStatus(201)
         ->assertJson($dataResponse)
         ->assertJsonCount(5, 'data');
+});
+
+
+test('create category with title and description errors', function () {
+    $data = [
+        'title' => '',
+        'description' => '1234',
+    ];
+
+    $response = $this->postJson('/api/' . API_VER . '/categories', $data);
+
+    // 422 Unprocessable Entity
+    // The HTTP 422 Unprocessable Entity status code means that while the server was able to interpret
+    // the request sent, it is still not able to process it. The major issue here is when a server is
+    // capable of interpreting a request, understanding its message, format, and structure, but still
+    // cannot process due to some logical error.
+    $response
+        ->assertStatus(422)
+        ->assertJsonValidationErrors([
+            'title',
+            'description'
+        ]);
+});
+
+test('create category title too short error', function () {
+    $data = [
+        'title' => '',
+    ];
+
+    $response = $this->postJson('/api/' . API_VER . '/categories', $data);
+
+    // 422 Unprocessable Entity
+    // The HTTP 422 Unprocessable Entity status code means that while the server was able to interpret
+    // the request sent, it is still not able to process it. The major issue here is when a server is
+    // capable of interpreting a request, understanding its message, format, and structure, but still
+    // cannot process due to some logical error.
+    $response
+        ->assertStatus(422)
+        ->assertJsonValidationErrors([
+            'title',
+        ]);
+});
+
+test('create category description too short error', function () {
+    $data = [
+        'title' => 'This is a test category',
+        'description' =>'short' // The description is too short
+    ];
+
+    $response = $this->postJson('/api/' . API_VER . '/categories', $data);
+
+    $response
+        ->assertStatus(422)
+        ->assertJsonValidationErrors([
+            'description',
+        ]);
 });

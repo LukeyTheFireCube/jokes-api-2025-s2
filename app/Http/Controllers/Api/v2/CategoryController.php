@@ -29,8 +29,8 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => ['string'],
-            'description' => ['string'],
+            'title' => ['string','required','min:4'],
+            'description' => ['string','nullable','min:6'],
         ]);
 
         $category = Category::create($validated);
