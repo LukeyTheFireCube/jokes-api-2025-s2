@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\v2;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Responses\ApiResponse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -12,7 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::all();
+        return ApiResponse::success($categories, "Categories retrieved");
     }
 
     /**
@@ -20,7 +23,14 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => ['string'],
+            'description' => ['string'],
+        ]);
+
+        $category = Category::create($validated);
+
+        return ApiResponse::success($category, 'Category created', 201);
     }
 
     /**
@@ -28,7 +38,12 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $category = Category::whereId($id)->get();
+
+        if (count($category)===0) {
+            return ApiResponse::error($category, "Category not found", 404);
+        }
+        return ApiResponse::success($category, "Category retrieved");
     }
 
     /**
@@ -46,4 +61,6 @@ class CategoryController extends Controller
     {
         //
     }
+
+
 }

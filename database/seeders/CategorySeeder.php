@@ -41,5 +41,8 @@ class CategorySeeder extends Seeder
         foreach ($seedCategories as $seedCategory) {
             Category::create($seedCategory);
         }
+
+        // Category::factory(10)->create();
+
     }
 }

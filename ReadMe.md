@@ -6,6 +6,27 @@ A Laravel Blade Template with Sanctum Authentication built in.
 
 *Based on the Blade & Breeze Starter Kit provided with Laravel versions before Laravel 12.*
 
+
+Useful links
+
+https://www.youtube.com/watch?v=GJTicY95Eq4
+
+https://scramble.dedoc.co/usage/getting-started
+
+https://laravel-news.com/withresponse
+
+https://laravel-news.com/laravel-response-classes
+
+https://medium.com/@a.shatrov.1982/building-laravel-api-http-responses-one-class-to-rule-them-all-feat-laravel-responsable-e311ad75d6ab
+
+https://magecomp.com/blog/laravel-creating-a-standardized-json-response-for-api/
+
+https://github.com/MarcinOrlowski/laravel-api-response-builder
+
+
+
+
+
 ### Built With
 
 [![PHP][Php.com]][Php-url]
