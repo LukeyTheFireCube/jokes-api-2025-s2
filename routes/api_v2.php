@@ -27,5 +27,30 @@ Route::prefix('auth')
 
     });
 
+/* Categories Routes ------------------------------------------------------ */
+Route::get('categories/trash', [CategoryControllerV2::class, 'trash'])
+    ->name('categories.trash');
 
-Route::ApiResource('categories', CategoryControllerV2::class);
+Route::delete('categories/trash/empty', [CategoryControllerV2::class, 'removeAll'])
+    ->name('categories.trash.remove.all');
+
+Route::post('categories/trash/recover', [CategoryControllerV2::class, 'recoverAll'])
+    ->name('categories.trash.recover.all');
+
+Route::delete('categories/trash/{id}/remove', [CategoryControllerV2::class, 'removeOne'])
+    ->name('categories.trash.remove.one');
+
+Route::post('categories/trash/{id}/recover', [CategoryControllerV2::class, 'recoverOne'])
+    ->name('categories.trash.recover.one');
+
+/** Stop people trying to "GET" admin/categories/trash/1234/delete or similar */
+Route::get('categories/trash/{id}/{method}', [CategoryControllerV2::class, 'trash']);
+
+Route::resource("categories", CategoryControllerV2::class);
+
+Route::post('categories/{category}/delete', [CategoryControllerV2::class, 'delete'])
+    ->name('categories.delete');
+
+Route::get('categories/{category}/delete', function () {
+    return redirect()->route('admin.categories.index');
+});

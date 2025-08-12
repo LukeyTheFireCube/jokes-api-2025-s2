@@ -120,11 +120,6 @@ test('create category title too short error', function () {
 
     $response = $this->postJson('/api/' . API_VER . '/categories', $data);
 
-    // 422 Unprocessable Entity
-    // The HTTP 422 Unprocessable Entity status code means that while the server was able to interpret
-    // the request sent, it is still not able to process it. The major issue here is when a server is
-    // capable of interpreting a request, understanding its message, format, and structure, but still
-    // cannot process due to some logical error.
     $response
         ->assertStatus(422)
         ->assertJsonValidationErrors([
