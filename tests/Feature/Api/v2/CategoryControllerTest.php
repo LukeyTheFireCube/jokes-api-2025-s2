@@ -75,6 +75,7 @@ test('create a new category', function () {
         'title' => 'Fake Category',
         'description' => 'Fake Category Description',
     ];
+
     $dataResponse = [
         'message' => "Category created",
         'success' => true,
