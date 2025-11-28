@@ -13,7 +13,8 @@ class AdminController extends Controller
     public function index(): View
     {
         $userCount = User::count();
-        $userSuspendedCount = User::where('suspended', 1)->count();
+        $userSuspendedCount = User::where('status', 'suspended')->count();
+        $userBannedCount = User::where('status', 'banned')->count();
 
         return view('admin.index')
             ->with('userCount', Number::format($userCount))
