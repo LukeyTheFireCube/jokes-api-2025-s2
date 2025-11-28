@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Joke extends Model
 {
@@ -36,5 +37,25 @@ class Joke extends Model
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function likes()
+    {
+        return $this->votes()->where('value', 1);
+    }
+
+    public function dislikes()
+    {
+        return $this->votes()->where('value', -1);
+    }
+
+    public function score()
+    {
+        return $this->votes()->sum('value');
     }
 }

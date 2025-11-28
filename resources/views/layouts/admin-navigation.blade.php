@@ -67,7 +67,7 @@
                 {{ __('Jokes') }}
             </x-side-nav-link>
 
-            <x-side-nav-link :href="route('home')" :active="request()->routeIs('home')">
+            <x-side-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('home')">
                 <i class="fa-solid fa-cat group-hover:text-zinc-500"></i>
                 {{ __('Categories') }}
             </x-side-nav-link>

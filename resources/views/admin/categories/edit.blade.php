@@ -30,7 +30,7 @@
                 <x-text-input id="title" class="block mt-1 w-full"
                               type="text"
                               name="title"
-                              value="{{ old('description') ?? $category->title }}"
+                              value="{{ old('title') ?? $category->title }}"
                 />
 
                 <x-input-error :messages="$errors->get('title')" class="mt-2"/>
