@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\AuthController as AuthControllerV1;
 use App\Http\Controllers\Api\v2\CategoryController as CategoryControllerV2;
+use App\Http\Controllers\Api\v2\RoleController as RoleControllerV2;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -54,3 +55,6 @@ Route::post('categories/{category}/delete', [CategoryControllerV2::class, 'delet
 Route::get('categories/{category}/delete', function () {
     return redirect()->route('admin.categories.index');
 });
+
+/* Roles Routes */
+Route::resource('roles', RoleControllerV2::class);

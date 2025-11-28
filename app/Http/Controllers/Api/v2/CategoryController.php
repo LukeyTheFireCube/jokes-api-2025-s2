@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Responses\ApiResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -14,7 +15,7 @@ class CategoryController extends Controller
     /**
      * Display a listing of the Categories.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
@@ -25,8 +26,8 @@ class CategoryController extends Controller
     /**
      * Store a newly created Category in storage.
      *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param StoreCategoryRequest $request
+     * @return JsonResponse
      */
     public function store(StoreCategoryRequest $request)
     {
@@ -44,7 +45,7 @@ class CategoryController extends Controller
      * Display the specified Category.
      *
      * @param string $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(string $id)
     {
@@ -59,9 +60,9 @@ class CategoryController extends Controller
     /**
      * Update the specified Category in storage.
      *
-     * @param Request $request
+     * @param UpdateCategoryRequest $request
      * @param string $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(UpdateCategoryRequest $request, string $id)
     {
@@ -85,7 +86,7 @@ class CategoryController extends Controller
      * Remove the specified Category from storage.
      *
      * @param string $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(string $id)
     {
@@ -103,7 +104,7 @@ class CategoryController extends Controller
     /**
      * Show all soft deleted Categories
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function trash()
     {
@@ -115,7 +116,7 @@ class CategoryController extends Controller
     /**
      * Recover all soft deleted categories from trash
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function recoverAll()
     {
@@ -127,7 +128,7 @@ class CategoryController extends Controller
     /**
      * Remove all soft deleted categories from trash
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function removeAll()
     {
@@ -140,7 +141,7 @@ class CategoryController extends Controller
      * Recover specified soft deleted category from trash
      *
      * @param string $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function recoverOne(string $id)
     {
@@ -159,7 +160,7 @@ class CategoryController extends Controller
      * Remove specified soft deleted category from trash
      *
      * @param string $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function removeOne(string $id)
     {

@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaticPageController;
 use App\Http\Controllers\Web\VoteController;
+use App\Http\Controllers\Admin\AdminRoleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StaticPageController::class, 'home'])
@@ -54,6 +55,16 @@ Route::middleware(['auth', 'verified'])
 
         Route::get('categories/{category}/delete', function () {
             return redirect()->route('admin.categories.index');
+        });
+
+        /* Roles */
+        Route::resource('roles', AdminRoleController::class);
+
+        Route::post('roles/{role}/delete', [AdminRoleController::class, 'delete'])
+            ->name('roles.delete');
+
+        Route::get('roles/{role}/delete', function () {
+            return redirect()->route('admin.roles.index');
         });
     });
 

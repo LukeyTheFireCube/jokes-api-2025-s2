@@ -59,4 +59,18 @@ class User extends Authenticatable
         return $this->hasMany(Vote::class);
     }
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        // super-user bypass
+        if ($this->role->name === 'super-user') {
+            return true;
+        }
+
+        return $this->role->permissions->contains('name', $permission);
+    }
 }
