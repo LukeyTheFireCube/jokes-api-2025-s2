@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Permission;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,34 +15,36 @@ class PermissionSeeder extends Seeder
     {
         $permissions = [
             // joke permissions
-            ['name' => 'joke.browse', 'label' => 'Browse jokes'],
-            ['name' => 'joke.read', 'label' => 'Read joke'],
-            ['name' => 'joke.add', 'label' => 'Add joke'],
-            ['name' => 'joke.edit', 'label' => 'Edit joke'],
-            ['name' => 'joke.delete', 'label' => 'Delete joke'],
+            ['name' => 'joke.browse'],
+            ['name' => 'joke.read'],
+            ['name' => 'joke.add'],
+            ['name' => 'joke.edit'],
+            ['name' => 'joke.delete'],
 
             // category permissions
-            ['name' => 'category.browse', 'label' => 'Browse categories'],
-            ['name' => 'category.read', 'label' => 'Read category'],
-            ['name' => 'category.add', 'label' => 'Add category'],
-            ['name' => 'category.edit', 'label' => 'Edit category'],
-            ['name' => 'category.delete', 'label' => 'Delete category'],
+            ['name' => 'category.browse'],
+            ['name' => 'category.read'],
+            ['name' => 'category.add'],
+            ['name' => 'category.edit'],
+            ['name' => 'category.delete'],
 
-            // roles (admin-only)
-            ['name' => 'role.browse', 'label' => 'Browse roles'],
-            ['name' => 'role.read', 'label' => 'Read role'],
-            ['name' => 'role.add', 'label' => 'Add role'],
-            ['name' => 'role.edit', 'label' => 'Edit role'],
-            ['name' => 'role.delete', 'label' => 'Delete role'],
+            // role management (admin-only)
+            ['name' => 'role.browse'],
+            ['name' => 'role.read'],
+            ['name' => 'role.add'],
+            ['name' => 'role.edit'],
+            ['name' => 'role.delete'],
 
             // users
-            ['name' => 'user.browse', 'label' => 'Browse users'],
-            ['name' => 'user.read', 'label' => 'Read user'],
-            ['name' => 'user.edit', 'label' => 'Edit user'],
+            ['name' => 'user.browse'],
+            ['name' => 'user.read'],
+            ['name' => 'user.edit'],
         ];
 
         foreach ($permissions as $p) {
-            Permission::firstOrCreate(['name' => $p['name']], $p);
+            Permission::firstOrCreate(
+                ['name' => $p['name'], 'guard_name' => 'web']
+            );
         }
     }
 }

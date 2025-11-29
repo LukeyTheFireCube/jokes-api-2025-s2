@@ -28,6 +28,9 @@ Route::middleware(['auth', 'verified'])
         Route::get('users', [AdminController::class, 'users'])
             ->name('users.index');
 
+        Route::post('/users/{user}/force-logout', [AdminController::class, 'forceLogout'])
+            ->name('users.force-logout');
+
         /* Categories Admin Routes ------------------------------------------------------ */
 
         Route::get('categories/trash', [AdminCategoryController::class, 'trash'])

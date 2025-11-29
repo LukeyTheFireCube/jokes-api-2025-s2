@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Number;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
 {
@@ -28,5 +30,14 @@ class AdminController extends Controller
 
         return view('admin.users.index')
             ->with('users', $users);
+    }
+
+    public function forceLogout(User $user)
+    {
+        Gate::authorize('forceLogout', $user->load('roles'));
+
+        DB::table('users')->where('id', $user->id)->update(['remember_token' => null]);
+
+        return response()->json(['message' => 'User logged out successfully']);
     }
 }

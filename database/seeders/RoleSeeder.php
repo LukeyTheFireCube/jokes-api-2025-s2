@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Permission;
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,40 +14,49 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        // Super-User
+        // Super-user (999)
         $superUser = Role::firstOrCreate(
-            ['name' => 'super-user'],
-            ['description' => 'Has access to all system features']
+            ['name' => 'super-user', 'guard_name' => 'web'],
+            ['description' => 'Has access to all system features', 'level' => 999]
         );
+        $superUser->syncPermissions(Permission::all());
 
-        $superUser->permissions()->sync(
-            Permission::all()->pluck('id')->toArray()
-        );
-
-        // Admin
+        // Admin (750)
         $admin = Role::firstOrCreate(
-            ['name' => 'admin'],
-            ['description' => 'Administrator with most system privileges']
+            ['name' => 'admin', 'guard_name' => 'web'],
+            ['description' => 'Administrator with most system privileges', 'level' => 750]
+        );
+        $admin->syncPermissions(
+            Permission::where('name', '!=', 'role.delete')->get()
         );
 
-        // Admin gets everything EXCEPT:
-        // - role.delete (from your table)
-        $admin->permissions()->sync(
-            Permission::where('name', '!=', 'role.delete')->pluck('id')->toArray()
+        // Staff (500)
+        $staff = Role::firstOrCreate(
+            ['name' => 'staff', 'guard_name' => 'web'],
+            ['description' => 'Staff role', 'level' => 500]
         );
+        $staff->syncPermissions([
+            'joke.browse',
+            'joke.read',
+            'joke.add',
+            'joke.edit',
 
-        // Staff
+            'category.browse',
+            'category.read',
+
+            'user.browse',
+            'user.read',
+        ]);
+
+
+        // Client (100)
         $client = Role::firstOrCreate(
-            ['name' => 'staff'],
-            ['description' => 'Basic user role']
+            ['name' => 'client', 'guard_name' => 'web'],
+            ['description' => 'Client role', 'level' => 100]
         );
-
-        // Client
-        $client = Role::firstOrCreate(
-            ['name' => 'client'],
-            ['description' => 'Basic user role']
-        );
-
-        $client->permissions()->sync([]);
+        $client->syncPermissions([
+            'joke.browse',
+            'joke.read',
+        ]);
     }
 }

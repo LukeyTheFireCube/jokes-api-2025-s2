@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -59,9 +60,9 @@ class User extends Authenticatable
         return $this->hasMany(Vote::class);
     }
 
-    public function role()
+    public function primaryRole()
     {
-        return $this->belongsTo(Role::class);
+        return $this->roles()->orderByDesc('level')->first();
     }
 
     public function hasPermission(string $permission): bool
@@ -71,6 +72,22 @@ class User extends Authenticatable
             return true;
         }
 
-        return $this->role->permissions->contains('name', $permission);
+        return $this->hasPermissionTo($permission);
+    }
+
+    public function canForceLogout(User $target): bool
+    {
+        if ($this->id === $target->id) {
+            return true;
+        }
+
+        $actor = $this->primaryRole();
+        $targetRole = $target->primaryRole();
+
+        if (!$actor || !$targetRole) {
+            return false;
+        }
+
+        return $actor->level > $targetRole->level;
     }
 }

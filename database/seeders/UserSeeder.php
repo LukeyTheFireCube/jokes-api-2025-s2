@@ -89,8 +89,8 @@ class UserSeeder extends Seeder
             );
 
             // Uncomment this line when using Spatie Permissions
-            // $user->assignRole($roles);
-            // $user->assignPermissions($permissions);
+            $user->assignRole($roles);
+            $user->givePermissionTo($permissions);
 
         }
 
