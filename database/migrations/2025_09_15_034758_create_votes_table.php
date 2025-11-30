@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Joke;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,10 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('joke_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignIdFor(Joke::class)
+                ->constrained()
+                ->onDelete('cascade');
+
 
             // vote type: 1 = like, -1 = dislike
             $table->tinyInteger('value');
@@ -23,7 +27,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Prevent a user from voting twice on the same joke
-            $table->unique(['user_id', 'joke_id']);
+            $table->unique(['user_id', Joke::class]);
         });
 
     }

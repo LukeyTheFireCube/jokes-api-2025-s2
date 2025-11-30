@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
                 UserSeeder::class,
                 // Add further seeder classes here
                 CategorySeeder::class,
+                JokeSeeder::class,
 
             ]
         );

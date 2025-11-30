@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Joke extends Model
 {
     /** @use HasFactory<\Database\Factories\JokeFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'jokes';
 
@@ -36,8 +37,9 @@ class Joke extends Model
 
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class, 'category_joke');
     }
+
 
     public function votes(): HasMany
     {

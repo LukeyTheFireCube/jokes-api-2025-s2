@@ -69,6 +69,35 @@ Route::middleware(['auth', 'verified'])
         Route::get('roles/{role}/delete', function () {
             return redirect()->route('admin.roles.index');
         });
+
+        /* Jokes Admin Routes -------------------------------------------------------- */
+
+        Route::get('jokes/trash', [\App\Http\Controllers\Admin\AdminJokeController::class, 'trash'])
+            ->name('jokes.trash');
+
+        Route::delete('jokes/trash/empty', [\App\Http\Controllers\Admin\AdminJokeController::class, 'removeAll'])
+            ->name('jokes.trash.remove.all');
+
+        Route::post('jokes/trash/recover', [\App\Http\Controllers\Admin\AdminJokeController::class, 'recoverAll'])
+            ->name('jokes.trash.recover.all');
+
+        Route::delete('jokes/trash/{id}/remove', [\App\Http\Controllers\Admin\AdminJokeController::class, 'removeOne'])
+            ->name('jokes.trash.remove.one');
+
+        Route::post('jokes/trash/{id}/recover', [\App\Http\Controllers\Admin\AdminJokeController::class, 'recoverOne'])
+            ->name('jokes.trash.recover.one');
+
+        /** Prevent direct GET access to sensitive paths */
+        Route::get('jokes/trash/{id}/{method}', [\App\Http\Controllers\Admin\AdminJokeController::class, 'trash']);
+
+        Route::resource('jokes', \App\Http\Controllers\Admin\AdminJokeController::class);
+
+        Route::post('jokes/{joke}/delete', [\App\Http\Controllers\Admin\AdminJokeController::class, 'delete'])
+            ->name('jokes.delete');
+
+        Route::get('jokes/{joke}/delete', function () {
+            return redirect()->route('admin.jokes.index');
+        });
     });
 
 Route::middleware('auth')->group(function () {

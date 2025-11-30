@@ -62,7 +62,7 @@
 
             </details>
 
-            <x-side-nav-link :href="route('home')" :active="request()->routeIs('home')">
+            <x-side-nav-link :href="route('admin.jokes.index')" :active="request()->routeIs('admin.jokes.index')">
                 <i class="fa-solid fa-laugh group-hover:text-zinc-500"></i>
                 {{ __('Jokes') }}
             </x-side-nav-link>

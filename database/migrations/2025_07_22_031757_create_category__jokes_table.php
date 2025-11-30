@@ -19,8 +19,8 @@ return new class extends Migration
             // $table->foreignId('joke_id')->constrained('users');
             // $table->foreignId('category_id')->constrained('users');
 
-            $table->foreignIdFor(Joke::class)->constrained();
-            $table->foreignIdFor(Category::class)->constrained();
+            $table->foreignIdFor(Joke::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Category::class)->constrained()->onDelete('cascade');
 
             $table->timestamps();
         });

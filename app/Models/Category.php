@@ -22,7 +22,7 @@ class Category extends Model
 
     public function jokes(): BelongsToMany
     {
-        return $this->belongsToMany(Joke::class);
+        return $this->belongsToMany(Joke::class, 'category_joke');
     }
 
     /**

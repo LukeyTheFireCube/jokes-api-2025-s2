@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreJokeRequest extends FormRequest
 {
@@ -22,7 +23,19 @@ class StoreJokeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['required', 'string', 'min:4', 'max:128'],
+            'content' => ['nullable', 'string', 'max:5000'],
+            'published_at' => ['nullable', 'date'],
+            'categories' => ['required', 'array', 'min:1'],
+            'categories.*' => ['integer', Rule::exists('categories', 'id')],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'categories.required' => 'Please select at least one category.',
+            'categories.*.exists' => 'One or more selected categories are invalid.',
         ];
     }
 }
