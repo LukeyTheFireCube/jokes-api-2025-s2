@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Web;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Joke;
 use App\Models\Vote;
 use Illuminate\Http\RedirectResponse;

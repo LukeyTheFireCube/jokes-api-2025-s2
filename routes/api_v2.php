@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\v1\AuthController as AuthControllerV1;
 use App\Http\Controllers\Api\v2\CategoryController as CategoryControllerV2;
 use App\Http\Controllers\Api\v2\RoleController as RoleControllerV2;
+use App\Http\Controllers\Api\v2\JokeController as JokeControllerV2;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,3 +59,31 @@ Route::get('categories/{category}/delete', function () {
 
 /* Roles Routes */
 Route::resource('roles', RoleControllerV2::class);
+
+/* Jokes Routes ------------------------------------------------------ */
+Route::get('jokes/trash', [JokeControllerV2::class, 'trash'])
+    ->name('jokes.trash');
+
+Route::delete('jokes/trash/empty', [JokeControllerV2::class, 'removeAll'])
+    ->name('jokes.trash.remove.all');
+
+Route::post('jokes/trash/recover', [JokeControllerV2::class, 'recoverAll'])
+    ->name('jokes.trash.recover.all');
+
+Route::delete('jokes/trash/{id}/remove', [JokeControllerV2::class, 'removeOne'])
+    ->name('jokes.trash.remove.one');
+
+Route::post('jokes/trash/{id}/recover', [JokeControllerV2::class, 'recoverOne'])
+    ->name('jokes.trash.recover.one');
+
+/** Prevent GET misuse like /jokes/trash/123/delete */
+Route::get('jokes/trash/{id}/{method}', [JokeControllerV2::class, 'trash']);
+
+Route::resource("jokes", JokeControllerV2::class);
+
+Route::post('jokes/{joke}/delete', [JokeControllerV2::class, 'delete'])
+    ->name('jokes.delete');
+
+Route::get('jokes/{joke}/delete', function () {
+    return redirect()->route('jokes.index');
+});
