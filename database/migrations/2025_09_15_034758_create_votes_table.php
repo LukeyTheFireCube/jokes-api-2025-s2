@@ -29,7 +29,6 @@ return new class extends Migration
             // Prevent a user from voting twice on the same joke
             $table->unique(['user_id', 'joke_id']);
         });
-
     }
 
     /**

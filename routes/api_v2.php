@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\v1\AuthController as AuthControllerV1;
 use App\Http\Controllers\Api\v2\CategoryController as CategoryControllerV2;
 use App\Http\Controllers\Api\v2\RoleController as RoleControllerV2;
 use App\Http\Controllers\Api\v2\JokeController as JokeControllerV2;
+use App\Http\Controllers\Api\v2\VoteController as VoteControllerV2;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -87,3 +88,10 @@ Route::post('jokes/{joke}/delete', [JokeControllerV2::class, 'delete'])
 Route::get('jokes/{joke}/delete', function () {
     return redirect()->route('jokes.index');
 });
+
+/* Vote Routes */
+Route::get('/jokes', function () {
+    return "";
+})->name('jokes.voteplaceholder');
+Route::post('/jokes/{joke}/vote', [VoteControllerV2::class, 'store'])->name('votes.store');
+Route::delete('/jokes/{joke}/vote', [VoteControllerV2::class, 'destroy'])->name('votes.destroy');
