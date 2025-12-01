@@ -3,15 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Joke;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Models\Joke;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class AdminJokeController extends Controller
 {
+    use AuthorizesRequests;
+    public function __construct()
+    {
+        $this->authorizeResource(Joke::class, 'joke');
+    }
     /**
      * Display a listing of jokes.
      */

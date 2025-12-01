@@ -1,13 +1,31 @@
 <?php
 
 use \App\Models\Category;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 
 const API_VER = 'v2';
 
 uses(RefreshDatabase::class);
 
+/**
+ * Helper: authenticated user
+ */
+function authUser(?string $role = 'super-user'): User {
+    $user = User::factory()->create();
+
+    if ($role) {
+        $user->assignRole($role);
+    }
+
+    Sanctum::actingAs($user);
+
+    return $user;
+}
+
 test('retrieve all categories', function () {
+    authUser();
     // Arrange
     $categories = Category::factory(5)->create();
 
@@ -23,11 +41,12 @@ test('retrieve all categories', function () {
     // Assert
     $response
         ->assertStatus(200)
-        ->assertJsonCount(5, 'data')
+        ->assertJsonCount(11, 'data')
         ->assertJson($data);
 });
 
 test('retrieve one category', function () {
+    authUser();
     // Arrange
     $categories = Category::factory(1)->create();
 
@@ -49,6 +68,7 @@ test('retrieve one category', function () {
 
 
 test('return error on missing category', function () {
+    authUser();
     // Arrange
     $categories = Category::factory(1)->create();
 
@@ -70,6 +90,7 @@ test('return error on missing category', function () {
 
 
 test('create a new category', function () {
+    authUser();
     // Arrange
     $data = [
         'title' => 'Fake Category',
@@ -94,6 +115,7 @@ test('create a new category', function () {
 
 
 test('create category with title and description errors', function () {
+    authUser();
     $data = [
         'title' => '',
         'description' => '1234',
@@ -115,6 +137,7 @@ test('create category with title and description errors', function () {
 });
 
 test('create category title too short error', function () {
+    authUser();
     $data = [
         'title' => '',
     ];
@@ -129,6 +152,7 @@ test('create category title too short error', function () {
 });
 
 test('create category description too short error', function () {
+    authUser();
     $data = [
         'title' => 'This is a test category',
         'description' =>'short' // The description is too short

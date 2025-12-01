@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminJokeController;
 use App\Http\Controllers\Admin\AdminRoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -72,27 +73,27 @@ Route::middleware(['auth', 'verified'])
 
         /* Jokes Admin Routes -------------------------------------------------------- */
 
-        Route::get('jokes/trash', [\App\Http\Controllers\Admin\AdminJokeController::class, 'trash'])
+        Route::get('jokes/trash', [AdminJokeController::class, 'trash'])
             ->name('jokes.trash');
 
-        Route::delete('jokes/trash/empty', [\App\Http\Controllers\Admin\AdminJokeController::class, 'removeAll'])
+        Route::delete('jokes/trash/empty', [AdminJokeController::class, 'removeAll'])
             ->name('jokes.trash.remove.all');
 
-        Route::post('jokes/trash/recover', [\App\Http\Controllers\Admin\AdminJokeController::class, 'recoverAll'])
+        Route::post('jokes/trash/recover', [AdminJokeController::class, 'recoverAll'])
             ->name('jokes.trash.recover.all');
 
-        Route::delete('jokes/trash/{id}/remove', [\App\Http\Controllers\Admin\AdminJokeController::class, 'removeOne'])
+        Route::delete('jokes/trash/{id}/remove', [AdminJokeController::class, 'removeOne'])
             ->name('jokes.trash.remove.one');
 
-        Route::post('jokes/trash/{id}/recover', [\App\Http\Controllers\Admin\AdminJokeController::class, 'recoverOne'])
+        Route::post('jokes/trash/{id}/recover', [AdminJokeController::class, 'recoverOne'])
             ->name('jokes.trash.recover.one');
 
         /** Prevent direct GET access to sensitive paths */
-        Route::get('jokes/trash/{id}/{method}', [\App\Http\Controllers\Admin\AdminJokeController::class, 'trash']);
+        Route::get('jokes/trash/{id}/{method}', [AdminJokeController::class, 'trash']);
 
-        Route::resource('jokes', \App\Http\Controllers\Admin\AdminJokeController::class);
+        Route::resource('jokes', AdminJokeController::class);
 
-        Route::post('jokes/{joke}/delete', [\App\Http\Controllers\Admin\AdminJokeController::class, 'delete'])
+        Route::post('jokes/{joke}/delete', [AdminJokeController::class, 'delete'])
             ->name('jokes.delete');
 
         Route::get('jokes/{joke}/delete', function () {

@@ -14,12 +14,14 @@ uses(RefreshDatabase::class);
 /**
  * Helper: authenticated user
  */
-function authUser(): User {
+function authUser(?string $role = 'super-user'): User {
     $user = User::factory()->create();
 
-    // Give the test user permission to manage jokes
-    // Assumes your policy checks "update", "delete", "view", etc.
-    Sanctum::actingAs($user, ['*']);
+    if ($role) {
+        $user->assignRole($role);
+    }
+
+    Sanctum::actingAs($user);
 
     return $user;
 }
@@ -204,7 +206,7 @@ test('can recover all trashed jokes', function () {
     $response = $this->postJson('/api/' . API_VER . '/jokes/trash/recover');
 
     $response->assertOk();
-    $this->assertDatabaseCount('jokes', 3);
+    $this->assertDatabaseCount('jokes', 5);
 });
 
 /*----------------------------------------------------------------------

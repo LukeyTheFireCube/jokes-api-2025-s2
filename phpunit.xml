@@ -30,5 +30,7 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <env name="DB_SEEDING" value="true"/>
+        <env name="SEED" value="true"/>
     </php>
 </phpunit>

@@ -18,10 +18,8 @@
             </x-link-primary-button>
 
             <div class="flex gap-6">
-
-                {{-- TODO: Need to add trash route --}}
                 <x-link-secondary-button
-                    href="{{ route('admin.categories.index') }}">
+                    href="{{ route('admin.categories.trash') }}">
                     @if($trashCount>0)
                         <i class="fa-solid fa-trash pr-2 text-black"></i>
                         {{ __('Trash is full') }}
