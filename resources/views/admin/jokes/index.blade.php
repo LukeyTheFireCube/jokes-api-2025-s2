@@ -47,6 +47,7 @@
                 <th class="p-2 w-1/4 rounded-tl-lg">{{ __('Content') }}</th>
                 <th class="p-2">{{ __('Author') }}</th>
                 <th class="p-2">{{ __('Categories') }}</th>
+                <th class="p-2">{{ __('Vote') }}</th>
                 <th class="p-2 pr-8 text-right">{{ __('Published') }}</th>
                 <th class="p-2 w-1/6 rounded-tr-lg">{{ __('Actions') }}</th>
             </tr>
@@ -70,6 +71,30 @@
                         @foreach($joke->categories as $cat)
                             <span class="inline-block px-2 py-1 mr-1 mt-1 text-xs bg-gray-200 rounded">{{ $cat->title }}</span>
                         @endforeach
+                    </td>
+
+                    <td class="p-2 border-b border-b-gray-400">
+                        <div class="flex items-center gap-2">
+                            <form action="{{ route('votes.store', $joke) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="value" value="1">
+                                <button type="submit" class="text-green-500 hover:text-green-700">
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                    <span>{{ $joke->votes()->where('value', 1)->count() }}</span>
+                                </button>
+                            </form>
+                            <span id="like-count-{{ $joke->id }}">{{ $joke->votes()->where('value', 1)->count() }}</span>
+
+                            <form action="{{ route('votes.store', $joke) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="value" value="-1">
+                                <button type="submit" class="text-red-500 hover:text-red-700">
+                                    <i class="fa-solid fa-thumbs-down"></i>
+                                    <span>{{ $joke->votes()->where('value', -1)->count() }}</span>
+                                </button>
+                            </form>
+                            <span id="dislike-count-{{ $joke->id }}">{{ $joke->votes()->where('value', -1)->count() }}</span>
+                        </div>
                     </td>
 
                     <td class="p-2 pr-8 text-right border-b border-b-gray-400">

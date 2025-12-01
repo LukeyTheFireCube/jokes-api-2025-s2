@@ -27,7 +27,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Prevent a user from voting twice on the same joke
-            $table->unique(['user_id', Joke::class]);
+            $table->unique(['user_id', 'joke_id']);
         });
 
     }

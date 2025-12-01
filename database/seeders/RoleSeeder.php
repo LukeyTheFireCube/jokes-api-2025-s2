@@ -41,6 +41,11 @@ class RoleSeeder extends Seeder
             'joke.add',
             'joke.edit',
 
+            'vote.add',
+            'vote.edit',
+            'vote.delete',
+            'vote.clearall',
+
             'category.browse',
             'category.read',
 
@@ -57,6 +62,10 @@ class RoleSeeder extends Seeder
         $client->syncPermissions([
             'joke.browse',
             'joke.read',
+
+            'vote.add',
+            'vote.edit',
+            'vote.delete',
         ]);
     }
 }

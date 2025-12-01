@@ -30,6 +30,28 @@
                 <p class="col-span-9 p-2">{{ $joke->user->name ?? '-' }}</p>
             </div>
 
+            <div class="flex items-center gap-4 mt-4">
+                <form action="{{ route('votes.store', $joke) }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="value" value="1">
+                    <button type="submit" class="text-green-500 hover:text-green-700">
+                        <i class="fa-solid fa-thumbs-up"></i> Like
+                        <span>{{ $joke->votes()->where('value', 1)->count() }}</span>
+                    </button>
+                </form>
+                <span id="like-count-{{ $joke->id }}">{{ $joke->votes()->where('value', 1)->count() }}</span>
+
+                <form action="{{ route('votes.store', $joke) }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="value" value="-1">
+                    <button type="submit" class="text-red-500 hover:text-red-700">
+                        <i class="fa-solid fa-thumbs-down"></i> Dislike
+                        <span>{{ $joke->votes()->where('value', -1)->count() }}</span>
+                    </button>
+                </form>
+                <span id="dislike-count-{{ $joke->id }}">{{ $joke->votes()->where('value', -1)->count() }}</span>
+            </div>
+
             <div class="grid grid-cols-12 gap-8">
                 <p class="col-span-2 bg-gray-200 p-2">{{ __('Categories') }}</p>
                 <p class="col-span-9 p-2">

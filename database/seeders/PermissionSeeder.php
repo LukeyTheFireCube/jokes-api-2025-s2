@@ -21,6 +21,12 @@ class PermissionSeeder extends Seeder
             ['name' => 'joke.edit'],
             ['name' => 'joke.delete'],
 
+            // vote permissions
+            ['name' => 'vote.add'],
+            ['name' => 'vote.edit'],
+            ['name' => 'vote.delete'],
+            ['name' => 'vote.clearall'],
+
             // category permissions
             ['name' => 'category.browse'],
             ['name' => 'category.read'],

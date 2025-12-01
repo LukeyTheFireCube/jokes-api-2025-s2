@@ -4,11 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Joke;
 use App\Models\Vote;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class VoteController extends Controller
 {
+    use AuthorizesRequests;
+
+    public function __construct()
+    {
+        $this->authorizeResource(Vote::class, 'vote');
+    }
+
     /**
      * Submit a like or dislike from the web UI.
      *
@@ -16,7 +25,7 @@ class VoteController extends Controller
      * @param Joke $joke
      * @return RedirectResponse
      */
-    public function store(Request $request, Joke $joke): \Illuminate\Http\RedirectResponse
+    public function store(Request $request, Joke $joke): RedirectResponse
     {
         $validated = $request->validate([
             'value' => ['required', 'in:1,-1']

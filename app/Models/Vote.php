@@ -13,6 +13,10 @@ class Vote extends Model
         'value',
     ];
 
+    protected $casts = [
+        'value' => 'integer',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
