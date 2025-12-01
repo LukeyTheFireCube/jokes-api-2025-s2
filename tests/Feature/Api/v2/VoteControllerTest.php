@@ -4,12 +4,15 @@ use App\Models\User;
 use App\Models\Joke;
 use App\Models\Vote;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create();
     $this->joke = Joke::factory()->create();
+
+    $this->user->givePermissionTo(['vote.add', 'vote.edit', 'vote.delete']);
 });
 
 test('prevents guests from voting', function () {
@@ -18,7 +21,7 @@ test('prevents guests from voting', function () {
 });
 
 test('allows logged in users to add a vote', function () {
-    $this->actingAs($this->user);
+    Sanctum::actingAs($this->user, ['*']);
 
     $response = $this->postJson(route('votes.store', $this->joke), ['value' => 1]);
 
@@ -33,10 +36,14 @@ test('allows logged in users to add a vote', function () {
 });
 
 test('allows logged in users to edit their vote', function () {
-    $this->actingAs($this->user);
+    Sanctum::actingAs($this->user, ['*']);
 
-    // First vote
-    $this->postJson(route('votes.store', $this->joke), ['value' => 1]);
+    // Create initial vote
+    Vote::create([
+        'user_id' => $this->user->id,
+        'joke_id' => $this->joke->id,
+        'value' => 1,
+    ]);
 
     // Update vote
     $response = $this->postJson(route('votes.store', $this->joke), ['value' => -1]);
@@ -52,10 +59,14 @@ test('allows logged in users to edit their vote', function () {
 });
 
 test('allows logged in users to delete their vote', function () {
-    $this->actingAs($this->user);
+    Sanctum::actingAs($this->user, ['*']);
 
-    // Add a vote first
-    $this->postJson(route('votes.store', $this->joke), ['value' => 1]);
+    // Create vote to delete
+    Vote::create([
+        'user_id' => $this->user->id,
+        'joke_id' => $this->joke->id,
+        'value' => 1,
+    ]);
 
     // Delete the vote
     $response = $this->deleteJson(route('votes.destroy', $this->joke));
