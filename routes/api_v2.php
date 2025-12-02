@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\AuthController as AuthControllerV1;
+use App\Http\Controllers\Api\v2\UserController as UserControllerV2;
 use App\Http\Controllers\Api\v2\CategoryController as CategoryControllerV2;
 use App\Http\Controllers\Api\v2\RoleController as RoleControllerV2;
 use App\Http\Controllers\Api\v2\JokeController as JokeControllerV2;
@@ -29,6 +30,19 @@ Route::prefix('auth')
             ->middleware(['auth:sanctum',]);
 
     });
+
+/* Users Routes ------------------------------------------------------ */
+Route::resource("users", UserControllerV2::class);
+
+Route::post('users/{user}/delete', [UserControllerV2::class, 'delete'])
+    ->name('users.delete');
+
+Route::get('users/{user}/delete', function () {
+    return redirect()->route('admin.users.index');
+});
+
+Route::post('/users/{user}/force-logout', [UserControllerV2::class, 'forceLogout'])
+    ->name('users.force-logout');
 
 /* Categories Routes ------------------------------------------------------ */
 Route::get('categories/trash', [CategoryControllerV2::class, 'trash'])

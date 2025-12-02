@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminJokeController;
 use App\Http\Controllers\Admin\AdminRoleController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaticPageController;
@@ -26,11 +27,18 @@ Route::middleware(['auth', 'verified'])
             ->name('index');
 
         /* Users Admin Routes ----------------------------------------------------------- */
-        Route::get('users', [AdminController::class, 'users'])
-            ->name('users.index');
+
+        Route::get('users/{user}/delete', function () {
+            return redirect()->route('admin.users.index');
+        });
+
+        Route::post('users/{user}/delete', [AdminUserController::class, 'delete'])
+            ->name('users.delete');
 
         Route::post('/users/{user}/force-logout', [AdminController::class, 'forceLogout'])
             ->name('users.force-logout');
+
+        Route::resource('users', AdminUserController::class);
 
         /* Categories Admin Routes ------------------------------------------------------ */
 

@@ -45,12 +45,12 @@
                                 @csrf
                                 @method('delete')
 
-                                <a href="{{ route('admin.users.index', $user) }}"
+                                <a href="{{ route('admin.users.show', $user) }}"
                                    class="hover:text-green-500 transition border p-2 text-center rounded">
                                     <i class="fa-solid fa-user-tag"></i>
                                 </a>
 
-                                <a href="{{ route('admin.users.index', $user) }}"
+                                <a href="{{ route('admin.users.edit', $user) }}"
                                    class="hover:text-blue-500 transition border p-2 text-center rounded">
                                     <i class="fa-solid fa-user-cog"></i>
                                 </a>

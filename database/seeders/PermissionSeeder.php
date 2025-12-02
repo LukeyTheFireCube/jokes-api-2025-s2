@@ -44,7 +44,9 @@ class PermissionSeeder extends Seeder
             // users
             ['name' => 'user.browse'],
             ['name' => 'user.read'],
+            ['name' => 'user.add'],
             ['name' => 'user.edit'],
+            ['name' => 'user.delete'],
         ];
 
         foreach ($permissions as $p) {
