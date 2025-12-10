@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v2;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Responses\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     /**
-     * GET /api/admin/users
+     * GET /api/v2/users
      * List users with search + pagination
      */
     public function index(Request $request)
@@ -33,13 +34,11 @@ class UserController extends Controller
             ->with('roles')
             ->paginate($perPage);
 
-        return response()->json([
-            'data' => $users,
-        ]);
+        return ApiResponse::success($users, "Users retrieved");
     }
 
     /**
-     * POST /api/admin/users
+     * POST /api/v2/users
      * Create a new user
      */
     public function store(Request $request)
@@ -60,25 +59,20 @@ class UserController extends Controller
 
         $user->syncRoles($validated['role']);
 
-        return response()->json([
-            'message' => 'User created successfully',
-            'data' => $user->load('roles'),
-        ], 201);
+        return ApiResponse::success($user->load('roles'), "User created successfully", 201);
     }
 
     /**
-     * GET /api/admin/users/{user}
+     * GET /api/v2/users/{user}
      * View user details
      */
     public function show(User $user)
     {
-        return response()->json([
-            'data' => $user->load('roles'),
-        ]);
+        return ApiResponse::success($user->load('roles'), "User retrieved");
     }
 
     /**
-     * PATCH /api/admin/users/{user}
+     * PATCH /api/v2/users/{user}
      * Update user details + role
      */
     public function update(Request $request, User $user)
@@ -101,27 +95,22 @@ class UserController extends Controller
             $user->syncRoles($validated['role']);
         }
 
-        return response()->json([
-            'message' => 'User updated',
-            'data' => $user->load('roles'),
-        ]);
+        return ApiResponse::success($user->load('roles'), "User updated");
     }
 
     /**
-     * DELETE /api/admin/users/{user}
+     * DELETE /api/v2/users/{user}
      * Delete a user
      */
     public function destroy(User $user)
     {
         $user->delete();
 
-        return response()->json([
-            'message' => 'User deleted successfully',
-        ]);
+        return ApiResponse::success(null, 'User deleted successfully');
     }
 
     /**
-     * POST /api/admin/users/{user}/force-logout
+     * POST /api/v2/users/{user}/force-logout
      */
     public function forceLogout(User $user)
     {
@@ -130,13 +119,11 @@ class UserController extends Controller
         $user->remember_token = null;
         $user->save();
 
-        return response()->json([
-            'message' => 'User force-logged-out',
-        ]);
+        return ApiResponse::success(null, 'User force-logged-out');
     }
 
     /**
-     * POST /api/admin/users/{user}/status
+     * POST /api/v2/users/{user}/status
      * Ban / suspend / activate
      */
     public function updateStatus(Request $request, User $user)
@@ -153,9 +140,6 @@ class UserController extends Controller
         $user->status = $validated['status'];
         $user->save();
 
-        return response()->json([
-            'message' => "User status updated to {$user->status}",
-            'data' => $user,
-        ]);
+        return ApiResponse::success($user, "User status updated to {$user->status}");
     }
 }

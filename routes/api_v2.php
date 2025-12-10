@@ -44,6 +44,8 @@ Route::get('users/{user}/delete', function () {
 Route::post('/users/{user}/force-logout', [UserControllerV2::class, 'forceLogout'])
     ->name('users.force-logout');
 
+Route::post('/users/{user}/status', [UserControllerV2::class, 'updateStatus']);
+
 /* Categories Routes ------------------------------------------------------ */
 Route::get('categories/trash', [CategoryControllerV2::class, 'trash'])
     ->name('categories.trash');
