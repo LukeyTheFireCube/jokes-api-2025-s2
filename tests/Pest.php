@@ -11,6 +11,9 @@
 |
 */
 
+use App\Models\User;
+use Laravel\Sanctum\Sanctum;
+
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
@@ -41,7 +44,17 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
-{
-    // ..
+/**
+ * Helper: authenticated user
+ */
+function authUser(?string $role = 'super-user'): User {
+    $user = User::factory()->create();
+
+    if ($role) {
+        $user->assignRole($role);
+    }
+
+    Sanctum::actingAs($user);
+
+    return $user;
 }

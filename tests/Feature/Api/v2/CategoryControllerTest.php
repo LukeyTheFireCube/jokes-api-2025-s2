@@ -9,25 +9,11 @@ const API_VER = 'v2';
 
 uses(RefreshDatabase::class);
 
-/**
- * Helper: authenticated user
- */
-function authUser(?string $role = 'super-user'): User {
-    $user = User::factory()->create();
-
-    if ($role) {
-        $user->assignRole($role);
-    }
-
-    Sanctum::actingAs($user);
-
-    return $user;
-}
-
 test('retrieve all categories', function () {
     authUser();
     // Arrange
-    $categories = Category::factory(5)->create();
+    Category::factory(5)->create();
+    $categories = Category::all();
 
     $data = [
         'message' => "Categories retrieved",
@@ -41,19 +27,20 @@ test('retrieve all categories', function () {
     // Assert
     $response
         ->assertStatus(200)
-        ->assertJsonCount(11, 'data')
+        ->assertJsonCount($categories->count(), 'data')
         ->assertJson($data);
 });
 
 test('retrieve one category', function () {
     authUser();
     // Arrange
-    $categories = Category::factory(1)->create();
+    Category::factory(1)->create();
+    $categories = Category::all()->toArray();
 
     $data = [
-        'message' => "Category retrieved",
         'success' => true,
-        'data' => $categories->toArray(),
+        'message' => "Category retrieved",
+        'data' => [$categories[0]],
     ];
 
     // Act

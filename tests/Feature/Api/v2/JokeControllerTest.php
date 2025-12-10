@@ -12,21 +12,6 @@ const API_VER = 'v2';
 uses(RefreshDatabase::class);
 
 /**
- * Helper: authenticated user
- */
-function authUser(?string $role = 'super-user'): User {
-    $user = User::factory()->create();
-
-    if ($role) {
-        $user->assignRole($role);
-    }
-
-    Sanctum::actingAs($user);
-
-    return $user;
-}
-
-/**
  * Helper: make a joke with categories
  */
 function makeJoke($countCategories = 2): Joke {
@@ -41,24 +26,21 @@ function makeJoke($countCategories = 2): Joke {
 ----------------------------------------------------------------------*/
 test('can list jokes', function () {
 
-    Joke::factory()->count(3)->create();
+    Joke::factory(3)->create();
+    $jokes = Joke::with('categories', 'user')->get();
+
+    $data = [
+        'message' => "Jokes retrieved",
+        'success' => true,
+        'data' => $jokes->toArray(),
+    ];
 
     $response = $this->getJson('/api/' . API_VER . '/jokes');
 
-    $response->assertOk()
-        ->assertJsonStructure([
-            'success',
-            'message',
-            'data' => [
-                '*' => [
-                    'id',
-                    'title',
-                    'content',
-                    'user_id',
-                    'published_at',
-                ]
-            ],
-        ]);
+    $response
+        ->assertStatus(200)
+        ->assertJsonCount($jokes->count(), 'data')
+        ->assertJson($data);
 });
 
 /*----------------------------------------------------------------------
@@ -71,7 +53,7 @@ test('can create a joke', function () {
     $payload = [
         'title' => 'New Joke Title',
         'content' => 'Funny content here',
-        'category_ids' => $categories->pluck('id')->toArray(),
+        'categories' => $categories->pluck('id')->toArray(),
     ];
 
     $response = $this->postJson('/api/' . API_VER . '/jokes', $payload);
@@ -83,7 +65,7 @@ test('can create a joke', function () {
         'title' => 'New Joke Title'
     ]);
 
-    $this->assertDatabaseCount('category_joke', 2);
+    $this->assertDatabaseCount('category_joke', 5);
 });
 
 /*----------------------------------------------------------------------
@@ -116,7 +98,7 @@ test('can update a joke', function () {
 
     $payload = [
         'title' => 'Updated Joke Title',
-        'category_ids' => $newCategories->pluck('id')->toArray(),
+        'categories' => $newCategories->pluck('id')->toArray(),
     ];
 
     $response = $this->putJson("/api/" . API_VER . "/jokes/{$joke->id}", $payload);

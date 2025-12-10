@@ -21,6 +21,10 @@
                             {{ __('Dashboard') }}
                         </x-nav-link>
 
+                        <x-nav-link :href="route('jokes.index')" :active="request()->routeIs('jokes.index')">
+                            {{ __('Jokes') }}
+                        </x-nav-link>
+
                         <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')">
                             {{ __('Admin') }}
                         </x-nav-link>

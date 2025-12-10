@@ -6,76 +6,76 @@ use App\Models\Vote;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 
+const API_VER = 'v2';
+
 uses(RefreshDatabase::class);
 
-beforeEach(function () {
-    $this->user = User::factory()->create();
-    $this->joke = Joke::factory()->create();
-
-    $this->user->givePermissionTo(['vote.add', 'vote.edit', 'vote.delete']);
-});
-
 test('prevents guests from voting', function () {
-    $response = $this->postJson(route('votes.store', $this->joke), ['value' => 1]);
+    $joke = Joke::factory()->create();
+
+    $response = $this->postJson('/api/' . API_VER . "/jokes/{$joke->id}/vote", ['value' => 1]);
     $response->assertStatus(401);
 });
 
 test('allows logged in users to add a vote', function () {
-    Sanctum::actingAs($this->user, ['*']);
+    authUser('client');
+    $joke = Joke::factory()->create();
 
-    $response = $this->postJson(route('votes.store', $this->joke), ['value' => 1]);
+    $response = $this->postJson('/api/' . API_VER . "/jokes/{$joke->id}/vote", ['value' => 1]);
 
     $response->assertStatus(200)
         ->assertJson(['success' => true]);
 
     $this->assertDatabaseHas('votes', [
-        'user_id' => $this->user->id,
-        'joke_id' => $this->joke->id,
+        'user_id' => auth()->id(),
+        'joke_id' => $joke->id,
         'value' => 1,
     ]);
 });
 
 test('allows logged in users to edit their vote', function () {
-    Sanctum::actingAs($this->user, ['*']);
+    authUser('client');
+    $joke = Joke::factory()->create(['user_id' => auth()->id()]);
 
     // Create initial vote
     Vote::create([
-        'user_id' => $this->user->id,
-        'joke_id' => $this->joke->id,
+        'user_id' => auth()->id(),
+        'joke_id' => $joke->id,
         'value' => 1,
     ]);
 
     // Update vote
-    $response = $this->postJson(route('votes.store', $this->joke), ['value' => -1]);
+    $response = $this->postJson('/api/' . API_VER . "/jokes/{$joke->id}/vote", ['value' => -1]);
 
     $response->assertStatus(200)
         ->assertJson(['success' => true]);
 
     $this->assertDatabaseHas('votes', [
-        'user_id' => $this->user->id,
-        'joke_id' => $this->joke->id,
+        'user_id' => auth()->id(),
+        'joke_id' => $joke->id,
         'value' => -1,
     ]);
 });
 
 test('allows logged in users to delete their vote', function () {
-    Sanctum::actingAs($this->user, ['*']);
+    authUser('client');
+    $joke = Joke::factory()->create(['user_id' => auth()->id()]);
 
-    // Create vote to delete
+    // Create initial vote
     Vote::create([
-        'user_id' => $this->user->id,
-        'joke_id' => $this->joke->id,
+        'user_id' => auth()->id(),
+        'joke_id' => $joke->id,
         'value' => 1,
     ]);
 
     // Delete the vote
-    $response = $this->deleteJson(route('votes.destroy', $this->joke));
+    $response = $this->deleteJson('/api/' . API_VER . "/jokes/{$joke->id}/vote");
 
     $response->assertStatus(200)
         ->assertJson(['success' => true]);
 
     $this->assertDatabaseMissing('votes', [
-        'user_id' => $this->user->id,
-        'joke_id' => $this->joke->id,
+        'user_id' => auth()->id(),
+        'joke_id' => $joke->id,
     ]);
 });

@@ -9,13 +9,14 @@ use App\Models\Joke;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Responses\ApiResponse;
 
 class VoteController extends Controller
 {
     /**
-     * Submit a like or dislike via API.
+     * Submit a like or dislike.
      *
-     * @param Request $request
+     * @param StoreVoteRequest $request
      * @param Joke $joke
      * @return JsonResponse
      */
@@ -35,39 +36,11 @@ class VoteController extends Controller
             ]
         );
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Your vote has been recorded.',
-            'vote' => $vote
-        ], 200);
-    }
-
-    public function update(UpdateVoteRequest $request, Joke $joke): JsonResponse
-    {
-        $vote = Vote::where('user_id', auth()->id())
-            ->where('joke_id', $joke->id)
-            ->first();
-
-        if ($vote) {
-            $vote->update([
-                'value' => $request->validated()['value']
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Your vote has been updated.',
-                'vote' => $vote
-            ], 200);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Vote not found.'
-        ], 404);
+        return ApiResponse::success($vote, "Your vote has been recorded.");
     }
 
     /**
-     * Remove a vote via API ("unvote").
+     * Remove a vote.
      *
      * @param Joke $joke
      * @return JsonResponse
@@ -80,16 +53,10 @@ class VoteController extends Controller
 
         if ($vote) {
             $vote->delete();
-            return response()->json([
-                'success' => true,
-                'message' => 'Vote removed.'
-            ], 200);
+            return ApiResponse::success(null, "Vote removed.");
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Vote not found.'
-        ], 404);
+        return ApiResponse::error($vote, "Vote not found.", 404);
     }
 }
 

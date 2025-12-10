@@ -35,7 +35,7 @@ class Joke extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function categories()
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class)
             ->using(Category_Joke::class)

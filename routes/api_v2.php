@@ -103,9 +103,9 @@ Route::get('jokes/{joke}/delete', function () {
     return redirect()->route('jokes.index');
 });
 
-/* Vote Routes */
-Route::get('/jokes', function () {
-    return "";
-})->name('jokes.voteplaceholder');
-Route::post('/jokes/{joke}/vote', [VoteControllerV2::class, 'store'])->name('votes.store');
-Route::delete('/jokes/{joke}/vote', [VoteControllerV2::class, 'destroy'])->name('votes.destroy');
+Route::middleware('auth')
+    ->group(function () {
+        /* Vote Routes */
+        Route::post('/jokes/{joke}/vote', [VoteControllerV2::class, 'store'])->name('votes.store');
+        Route::delete('/jokes/{joke}/vote', [VoteControllerV2::class, 'destroy'])->name('votes.destroy');
+    });

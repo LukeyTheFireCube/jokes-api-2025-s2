@@ -32,11 +32,11 @@ class JokeController extends Controller
         $joke = Joke::create([
             'title' => $validated['title'],
             'content' => $validated['content'] ?? null,
-            'user_id' => $validated['user_id'],
+            'user_id' => auth()->id(),
             'published_at' => $validated['published_at'] ?? null,
         ]);
 
-        if (!empty($validated['categories'])) {
+        if (array_key_exists('categories', $validated)) {
             $joke->categories()->sync($validated['categories']);
         }
 
@@ -73,12 +73,12 @@ class JokeController extends Controller
         $joke->update([
             'title' => $validated['title'] ?? $joke->title,
             'content' => $validated['content'] ?? $joke->content,
-            'user_id' => $validated['user_id'] ?? $joke->user_id,
+            'user_id' => $joke->user_id,
             'published_at' => $validated['published_at'] ?? $joke->published_at,
         ]);
 
         // Sync categories if provided
-        if (isset($validated['categories'])) {
+        if (array_key_exists('categories', $validated)) {
             $joke->categories()->sync($validated['categories']);
         }
 
