@@ -1,14 +1,14 @@
-<x-admin-layout>
+<x-app-layout>
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white leading-tight">
-            {{ __('Joke Admin') }}
+            {{ __('Joke') }}
         </h2>
     </x-slot>
 
     <section class="py-12 mx-12 space-y-4">
 
-        <form class="flex flex-col gap-4" method="post" action="{{ route('admin.jokes.destroy', $joke) }}">
+        <form class="flex flex-col gap-4" method="post" action="{{ route('jokes.destroy', $joke) }}">
             @csrf
             @method('delete')
 
@@ -27,7 +27,7 @@
             </div>
 
             <div class="flex flex-row justify-start">
-                <x-link-primary-button href="{{ route('admin.jokes.index') }}" class="px-12 mr-6 ">
+                <x-link-primary-button href="{{ route('jokes.index') }}" class="px-12 mr-6 ">
                     <i class="fa-solid fa-cancel text-lg pr-2"></i> Cancel
                 </x-link-primary-button>
 
@@ -40,4 +40,4 @@
 
     </section>
 
-</x-admin-layout>
+</x-app-layout>

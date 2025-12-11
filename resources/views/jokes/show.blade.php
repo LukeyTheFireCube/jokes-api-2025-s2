@@ -1,8 +1,8 @@
-<x-admin-layout>
+<x-app-layout>
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white leading-tight">
-            {{ __('Joke Admin') }}
+            {{ __('Joke') }}
         </h2>
     </x-slot>
 
@@ -62,12 +62,12 @@
             </div>
 
             <div class="flex flex-row justify-start">
-                <x-link-primary-button href="{{ route('admin.jokes.edit', $joke) }}" class="mr-6 px-12">
+                <x-link-primary-button href="{{ route('jokes.edit', $joke) }}" class="mr-6 px-12">
                     <i class="fa-solid fa-edit pr-2 text-lg"></i>
                     {{ __(' Edit') }}
                 </x-link-primary-button>
 
-                <x-link-secondary-button href="{{ route('admin.jokes.index') }}" class="mr-6">
+                <x-link-secondary-button href="{{ route('jokes.index') }}" class="mr-6">
                     {{ __(' All Jokes') }}
                 </x-link-secondary-button>
 
@@ -81,4 +81,4 @@
 
     </section>
 
-</x-admin-layout>
+</x-app-layout>

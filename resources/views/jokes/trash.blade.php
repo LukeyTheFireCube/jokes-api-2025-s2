@@ -1,30 +1,30 @@
-<x-admin-layout>
+<x-app-layout>
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white leading-tight">
-            {{ __('Joke Admin Trash') }}
+            {{ __('Joke Trash') }}
         </h2>
     </x-slot>
 
     <section class="py-6 mx-12 space-y-4">
         <nav class="flex flex-row justify-between">
             <div class="flex gap-4 justify-end">
-                <x-link-primary-button href="{{ route('admin.jokes.create') }}">
+                <x-link-primary-button href="{{ route('jokes.create') }}">
                     <i class="fa-solid fa-plus pr-2"></i> {{ __('Add Joke') }}
                 </x-link-primary-button>
 
-                <x-link-secondary-button href="{{ route('admin.jokes.index') }}" class="bg-gray-900 text-white hover:bg-gray-500">
+                <x-link-secondary-button href="{{ route('jokes.index') }}" class="bg-gray-900 text-white hover:bg-gray-500">
                     <i class="fa-solid fa-list pr-2"></i> {{ __('All Jokes') }}
                 </x-link-secondary-button>
 
-                <form method="post" action="{{ route('admin.jokes.trash.recover.all') }}">
+                <form method="post" action="{{ route('jokes.trash.recover.all') }}">
                     @csrf
                     <x-primary-button class="justify-center bg-gray-500! hover:bg-gray-900! text-white" type="submit">
                         <i class="fa-solid fa-recycle text-lg pr-2"></i> {{ __('Recover All') }}
                     </x-primary-button>
                 </form>
 
-                <form method="post" action="{{ route('admin.jokes.trash.remove.all') }}">
+                <form method="post" action="{{ route('jokes.trash.remove.all') }}">
                     @csrf
                     @method('delete')
                     <x-secondary-button class="overflow-hidden justify-center" type="submit">
@@ -34,12 +34,12 @@
             </div>
 
             <div class="flex gap-6">
-                <form action="{{ route('admin.jokes.trash') }}" name="searchForm" class="flex flex-inline gap-2 align-top">
+                <form action="{{ route('jokes.trash') }}" name="searchForm" class="flex flex-inline gap-2 align-top">
                     <x-text-input name="search" class="px-2 py-1 border border-gray-200" :value="$search??''"/>
                     <x-primary-button type="submit"><i class="fa-solid fa-search pr-2"></i> {{ __(' Search Deleted') }}</x-primary-button>
                 </form>
 
-                <x-link-secondary-button href="{{ route('admin.jokes.trash') }}">
+                <x-link-secondary-button href="{{ route('jokes.trash') }}">
                     <i class="fa-solid fa-list pr-2"></i> {{ __(' All Deleted') }}
                 </x-link-secondary-button>
             </div>
@@ -59,7 +59,7 @@
                     <td class="p-2 font-medium ">{{ $joke->title }}</td>
                     <td class="p-2 ">{{ $joke->user->name ?? '-' }}</td>
                     <td class="p-2 flex gap-4">
-                        <form method="post" action="{{ route('admin.jokes.trash.recover.one', $joke) }}">
+                        <form method="post" action="{{ route('jokes.trash.recover.one', $joke) }}">
                             @csrf
                             <x-primary-button class="overflow-hidden justify-center" type="submit">
                                 <i class="fa-solid fa-recycle text-lg"></i>
@@ -67,7 +67,7 @@
                             </x-primary-button>
                         </form>
 
-                        <form method="post" action="{{ route('admin.jokes.trash.remove.one', $joke) }}">
+                        <form method="post" action="{{ route('jokes.trash.remove.one', $joke) }}">
                             @csrf
                             @method('delete')
                             <x-secondary-button class="overflow-hidden justify-center" type="submit">
@@ -91,4 +91,4 @@
         </table>
     </section>
 
-</x-admin-layout>
+</x-app-layout>

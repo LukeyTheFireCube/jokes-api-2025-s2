@@ -1,19 +1,19 @@
-<x-admin-layout>
+<x-app-layout>
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white leading-tight">
-            {{ __('Joke Admin') }}
+            {{ __('Joke') }}
         </h2>
     </x-slot>
 
     <section class="py-12 mx-12 space-y-4">
         <nav class="flex flex-row justify-between">
-            <x-link-primary-button class="bg-gray-500!" href="{{ route('admin.jokes.index') }}">
+            <x-link-primary-button class="bg-gray-500!" href="{{ route('jokes.index') }}">
                 All Jokes
             </x-link-primary-button>
         </nav>
 
-        <form class="flex flex-col gap-4" method="post" action="{{ route('admin.jokes.update', $joke) }}">
+        <form class="flex flex-col gap-4" method="post" action="{{ route('jokes.update', $joke) }}">
             @csrf
             @method('patch')
 
@@ -67,11 +67,11 @@
                     <i class="fa-solid fa-save pr-2 text-lg"></i> Save
                 </x-primary-button>
 
-                <x-link-secondary-button href="{{ route('admin.jokes.index') }}">
+                <x-link-secondary-button href="{{ route('jokes.index') }}">
                     <i class="fa-solid fa-cancel pr-2 text-lg"></i> Cancel
                 </x-link-secondary-button>
             </div>
         </form>
     </section>
 
-</x-admin-layout>
+</x-app-layout>

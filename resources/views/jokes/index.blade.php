@@ -1,21 +1,21 @@
-<x-admin-layout>
+<x-app-layout>
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white leading-tight">
-            {{ __('Joke Admin') }}
+            {{ __('Joke') }}
         </h2>
     </x-slot>
 
     <section class="py-6 mx-12 space-y-4">
 
         <nav class="flex flex-row justify-between">
-            <x-link-primary-button href="{{ route('admin.jokes.create') }}">
+            <x-link-primary-button href="{{ route('jokes.create') }}">
                 <i class="fa-solid fa-plus pr-2"></i>
                 {{ __('Add Joke') }}
             </x-link-primary-button>
 
             <div class="flex gap-6">
-                <x-link-secondary-button href="{{ route('admin.jokes.trash') }}">
+                <x-link-secondary-button href="{{ route('jokes.trash') }}">
                     @if($trashCount>0)
                         <i class="fa-solid fa-trash pr-2 text-black"></i>
                         {{ __('Trash is full') }}
@@ -25,7 +25,7 @@
                     @endif
                 </x-link-secondary-button>
 
-                <form action="{{ route('admin.jokes.index') }}" name="searchForm" class="flex flex-inline gap-2 align-top">
+                <form action="{{ route('jokes.index') }}" name="searchForm" class="flex flex-inline gap-2 align-top">
                     <x-text-input name="search" class="px-2 py-1 border border-gray-200" :value="$search ?? ''"/>
                     <x-primary-button type="submit">
                         <i class="fa-solid fa-search pr-2"></i>
@@ -33,7 +33,7 @@
                     </x-primary-button>
                 </form>
 
-                <x-link-secondary-button href="{{ route('admin.jokes.index') }}">
+                <x-link-secondary-button href="{{ route('jokes.index') }}">
                     <i class="fa-solid fa-list pr-2"></i>
                     {{ __('Show All') }}
                 </x-link-secondary-button>
@@ -102,15 +102,15 @@
                     </td>
 
                     <td class="p-2 border-b border-b-gray-400">
-                        <form action="{{ route('admin.jokes.delete', $joke) }}" class="grid grid-cols-3 gap-4" method="post">
+                        <form action="{{ route('jokes.delete', $joke) }}" class="grid grid-cols-3 gap-4" method="post">
                             @csrf
 
-                            <x-link-primary-button class="overflow-hidden justify-center" href="{{ route('admin.jokes.show', $joke) }}">
+                            <x-link-primary-button class="overflow-hidden justify-center" href="{{ route('jokes.show', $joke) }}">
                                 <i class="fa-solid fa-eye text-lg"></i>
                                 <span class="sr-only">{{ __('Show') }}</span>
                             </x-link-primary-button>
 
-                            <x-link-primary-button class="bg-gray-700! hover:bg-gray-500! overflow-hidden justify-center" href="{{ route('admin.jokes.edit', $joke) }}">
+                            <x-link-primary-button class="bg-gray-700! hover:bg-gray-500! overflow-hidden justify-center" href="{{ route('jokes.edit', $joke) }}">
                                 <i class="fa-solid fa-edit text-lg"></i>
                                 <span class="sr-only">{{ __('Edit') }}</span>
                             </x-link-primary-button>
@@ -137,4 +137,4 @@
 
     </section>
 
-</x-admin-layout>
+</x-app-layout>

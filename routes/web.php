@@ -119,9 +119,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/jokes', function () {
-        return "";
-    })->name('jokes.voteplaceholder');
+//    Route::get('/jokes', function () {
+//        return "";
+//    })->name('jokes.voteplaceholder');
     Route::post('/jokes/{joke}/vote', [VoteController::class, 'store'])->name('votes.store');
     Route::delete('/jokes/{joke}/vote', [VoteController::class, 'destroy'])->name('votes.destroy');
 });
